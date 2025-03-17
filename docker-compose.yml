@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: spring_boot_app
+    restart: always
+    env_file:
+      - ./backend/.env
+    environment:
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+      DB_NAME: ${DB_NAME}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    container_name: nextjs_app
+    restart: always
+    depends_on:
+      - backend
+    env_file:
+      - ./frontend/.env
+    # environment:
+      # NEXT_PUBLIC_BACKEND_URL: http://backend:8080/api
+      # NEXT_PUBLIC_GOOGLE_MAPS_API: ${NEXT_PUBLIC_GOOGLE_MAPS_API}
+    ports:
+      - "3000:3000"
